@@ -1,4 +1,4 @@
-# Business intelligence for Thrift Stores
+# Data Analysis and Business Strategy for Thrift Stores
 
 In this machine learning project, we will be able to predict which pieces of clothing in a Thrift Store are expensive (>= 100 reais) and which of those are cheap (<100 reais), with 95 % accuracy, based only on the clothing descriptions.
 
