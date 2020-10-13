@@ -12,4 +12,4 @@ Our objective is to perform a statistical analysis that will help a newly opened
 2. Data exploration
 3. Natural Language Processing (NLP)
 
-The notebooks are still midway through their development. NLP is still at its early stages and is not shown here.
+The data analysis will be further published on Kaggle.
