@@ -2,7 +2,7 @@
 
 Our objective is to perform a statistical analysis that will help a newly opened thrift store to make efficient and profitful businesses decisions. 
 
-In this machine learning project, we will be able to predict which pieces of clothing in a Thrift Store are expensive (>= 100 reais) and which pieces of clothing are cheap (<100 reais), with 95 % accuracy, based only on the clothing descriptions. This allowed us to grasp which brands are the most valuable in the market, and to make sense of how much of this value is lost due to second-hand selling of these clothes.
+In this machine learning project, we will be able to predict which pieces of clothing in a Thrift Store are expensive (>= 100 reais) and which pieces of clothing are cheap (<100 reais), with 95 % accuracy, based only on the clothing descriptions. This allowed us to grasp which brands are the most valuable in the market. It also allowed us to make sense of how much of this value is lost for they being second-hand clothes.
 
  - [See the complete data analysis](https://github.com/pedroafleite/thrift_stores/blob/master/thrift_store.md).
  - [Data source available on Kaggle](https://www.kaggle.com/mateuspgomes/brazil-thrift-stores-data).
