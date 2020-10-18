@@ -6,7 +6,7 @@ In this machine learning project, we will be able to predict which pieces of clo
 
  - [See the complete data analysis](https://github.com/pedroafleite/thrift_stores/blob/master/thrift_store.md).
  - [Data source available on Kaggle](https://www.kaggle.com/mateuspgomes/brazil-thrift-stores-data).
- - Files uploaded above (.csv) have been partially cleaned, with typos corrected.
+ - [Files uploaded above (.csv) have been partially cleaned, with typos corrected](https://github.com/pedroafleite/thrift_stores/tree/master/fixed%20typos).
  
 This notebook contains:
 1. Data cleaning
