@@ -1,23 +1,23 @@
 # Data Analysis and Strategy for Thrift Stores
 
 ### Table of contents
-1. [Introduction and Data Description](#1-introduction-and-data-description)
+- 1. [Introduction and Data Description](#1-introduction-and-data-description)
     - 1.1 [What are our first impressions?](#11-what-are-our-first-impressions)
     
     
-2. [Data Cleaning](#2-data-cleaning)
+- 2. [Data Cleaning](#2-data-cleaning)
     - 2.1 [Thrift B](#21-thrift-b)
     - 2.2 [Thrift A and C](#22-thrift-a-and-c)
     
     
-3. [Exploratory Data Analysis](#3-exploratory-data-analysis)
+- 3. [Exploratory Data Analysis](#3-exploratory-data-analysis)
     - 3.1 [Thrift B](#31-thrift-b)
     - 3.2 [Thrift A and C](#32-thrift-a-and-c)
     - 3.3 [Conclusions of Exploratory Data Analysis](#33-conclusions-of-exploratory-data-analysis)
     - 3.4 [Recommendations for Future Datasets](#34-recommendations-for-future-datasets)
     
     
-4. [Natural Language Processing (NLP)](#4-natural-language-processing-nlp)
+- 4. [Natural Language Processing (NLP)](#4-natural-language-processing-nlp)
     - 4.1 [Wordcloud](#41-wordcloud)
     - 4.2 [Bag-of-Words](#42-bag-of-words)
        - 4.2.1 [Defining a new categorical variable](#421-defining-a-new-categorical-variable)
@@ -30,7 +30,7 @@ Our objective here is to perform a statistical analysis that will help a newly o
 
 That are three different Thrift Stores: A, B and C. 
 
-For didactic purposes, the abovementioned steps will be somewhat shuffled midway to give the logical perspective of the data analysis. Firstly, we will clear the data and explore the Thrift Store B dataset. Only after going through Thrift Store B, we will go for Thrift Stores A and C. Then, we will evaluate the data holistically and take (1) broad conclusions for the thrift store market and (2) specific conclusions for each thrift store.
+For didactic purposes, the the order of analysis of each Thrift Store will be somewhat shuffled midway to give the logical perspective of the data analysis. Firstly, we will clear the data and explore the Thrift Store B dataset. Only after going through Thrift Store B, we will go for Thrift Stores A and C. The reasoning for this re-ordering will be naturally explained during the data analysis. Then, we will evaluate the data holistically and take (1) broad conclusions for the thrift store market and (2) specific conclusions for each thrift store.
 
 
 ```python
@@ -888,7 +888,7 @@ thrift_b.plot(kind='scatter', x='precoComDesconto', y='precoSemDesconto', color=
 
 
 
-![png](output_26_1.png)
+![png](thrift_store_files/thrift_store_26_1.png)
 
 
 There are two main linear trends in the data. The diagonal trend seems to indicate a discount price that is about 70-75% lesser than the full price. For instance, at y(precoSemDesconto)=5000; while on x(precoComDesconto)≈1125-1500.
@@ -901,7 +901,7 @@ fig = sns.scatterplot(x='precoComDesconto', y='precoSemDesconto', hue='Disponív
 ```
 
 
-![png](output_28_0.png)
+![png](thrift_store_files/thrift_store_28_0.png)
 
 
 This is interesting as well. "Vendido" means sold, while "Disponível" means available.
@@ -923,7 +923,7 @@ thrift_b[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-![png](output_30_1.png)
+![png](thrift_store_files/thrift_store_30_1.png)
 
 
 
@@ -940,7 +940,7 @@ thrift_b[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-![png](output_31_1.png)
+![png](thrift_store_files/thrift_store_31_1.png)
 
 
 Full prices (precoSemDesconto) are usually arranged at every 10 reais. Utilyzing "round numbers-1" may be a good sales pitch. That is, selling something for 79 reais instead of 80 reais. Or 89 instead of 90. Or 99 instead of 100. We are psychologycally more prone to relate a 99 reais price to a 90 reais rather than to 100 reais, even though the actual price is 9x closer to 100 reais rather than 90.
@@ -1054,7 +1054,7 @@ plt.show()
 ```
 
 
-![png](output_37_0.png)
+![png](thrift_store_files/thrift_store_37_0.png)
 
 
 Great! 
@@ -1074,7 +1074,7 @@ thrift_b[['Desconto']].plot(kind='hist', alpha=0.7, bins=100, range=[0,100])
 
 
 
-![png](output_39_1.png)
+![png](thrift_store_files/thrift_store_39_1.png)
 
 
 Indeed, most discount seem to occur at the 70-75% range.
@@ -1107,15 +1107,15 @@ plt.xlabel('Óculos')
 
 
 
-![png](output_41_1.png)
+![png](thrift_store_files/thrift_store_41_1.png)
 
 
 
-![png](output_41_2.png)
+![png](thrift_store_files/thrift_store_41_2.png)
 
 
 
-![png](output_41_3.png)
+![png](thrift_store_files/thrift_store_41_3.png)
 
 
 Discount is given at about the same percentage rate regardless of which type of object is being sold.
@@ -1140,11 +1140,11 @@ plt.xlabel('Disponível')
 
 
 
-![png](output_43_1.png)
+![png](thrift_store_files/thrift_store_43_1.png)
 
 
 
-![png](output_43_2.png)
+![png](thrift_store_files/thrift_store_43_2.png)
 
 
 Discount also does not seem to be a factor for differing which pieces have been sold (Vendido) and which pieces are still available (Disponível). In fact, there seems to be a general proportion between objects sold and available, as Thrift Stores might reasonably showcase new products at about the same rate that the products from the former batch have been sold.
@@ -1170,11 +1170,11 @@ thrift_c[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-![png](output_46_1.png)
+![png](thrift_store_files/thrift_store_46_1.png)
 
 
 
-![png](output_46_2.png)
+![png](thrift_store_files/thrift_store_46_2.png)
 
 
 
@@ -1192,11 +1192,11 @@ thrift_c[['Desconto']].plot(kind='hist', alpha=0.7, bins=100, range=[0,100])
 
 
 
-![png](output_47_1.png)
+![png](thrift_store_files/thrift_store_47_1.png)
 
 
 
-![png](output_47_2.png)
+![png](thrift_store_files/thrift_store_47_2.png)
 
 
 
@@ -1622,7 +1622,7 @@ plt.show()
 ```
 
 
-![png](output_51_0.png)
+![png](thrift_store_files/thrift_store_51_0.png)
 
 
 
@@ -1714,7 +1714,7 @@ plt.imshow(wordcloud, interpolation='bilinear')
 
 
 
-![png](output_57_1.png)
+![png](thrift_store_files/thrift_store_57_1.png)
 
 
 Fine. Now let's apply wordcloud for the first order keyword (which would correspond to the main nouns in the dataset).
@@ -1735,7 +1735,7 @@ plt.imshow(wordcloud2, interpolation='bilinear')
 
 
 
-![png](output_59_1.png)
+![png](thrift_store_files/thrift_store_59_1.png)
 
 
 That does not seem to work well given that, intuitivelly, it is much harder to imagine that "Anabela" (a specific type of sandal) and "Colete" (waistcoat) would have the same weight as standard pieces of clothing such as "Calça" (trousers *aka in US* pants) and "Camisa" (shirt). 
@@ -2723,7 +2723,7 @@ feature_names, n_top_features=40)
 ```
 
 
-![png](output_90_0.png)
+![png](thrift_store_files/thrift_store_90_0.png)
 
 
 This last diagram shows which brands are hierarchically related to cheap or expensive products.
