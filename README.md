@@ -11,6 +11,6 @@ In this machine learning project, we will be able to predict which pieces of clo
 This notebook contains:
 1. Data cleaning
 2. Data exploration
-3. Natural Language Processing (NLP)
+3. Basic Natural Language Processing (NLP) techniques
 
-Data analysis will be further published on Kaggle.
+Data analysis will be further published at Kaggle.
