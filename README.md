@@ -1,4 +1,4 @@
-# Data Analysis and Business Strategy for Thrift Stores
+## Data Analysis and Business Strategy for Thrift Stores
 
 Our objective is to perform a statistical analysis that will help a newly opened thrift store to make efficient and profitful businesses decisions. 
 
@@ -13,6 +13,7 @@ This notebook contains:
 2. Data exploration
 3. Basic Natural Language Processing (NLP) techniques
 
-Data analysis will be further published at Kaggle.
+Data analysis will be further published on Kaggle.
 
-***A personal history of how this project came about***: The idea of this project sparked once the COVID-19 pandemic hit and my mother-in-law, who owns a Thrift Store, had to close her shop due to the quarentine. As I was trying to find solutions to help her business, I stumped on the [Brazilian Thrift Store dataset on Kaggle](https://www.kaggle.com/mateuspgomes/brazil-thrift-stores-data), that up to then had no notebooks written about it. Factually, the dataset is hard to work with because that are only a small number of numerical variables, and because it is written in portuguese.
+***A personal history of how this project came about***: The idea behind this project sparked once the COVID-19 pandemic hit and my mother-in-law, who owns a Thrift Store, had to close her shop due to the quarentine. As I was trying to find solutions to help her business, I stumped on the [Brazilian Thrift Store dataset on Kaggle](https://www.kaggle.com/mateuspgomes/brazil-thrift-stores-data), that up to then had no notebooks written about it. Factually, the dataset is hard to work with because that are only a small number of numerical variables, and because it is written in portuguese.
+
