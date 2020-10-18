@@ -1,12 +1,32 @@
 # Data Analysis and Strategy for Thrift Stores
 
-## Data description
- 
-Our objective here is to perform a statistical analysis that will help a newly opened thrift store to make efficient and profitful businesses decisions. Data analysis will be done through the following steps:
+### Table of contents
+1. [Introduction and Data Description](#1-introduction-and-data-description)
+    - 1.1 [What are our first impressions?](#11-what-are-our-first-impressions)
+    
+    
+2. [Data Cleaning](#2-data-cleaning)
+    - 2.1 [Thrift B](#21-thrift-b)
+    - 2.2 [Thrift A and C](#22-thrift-a-and-c)
+    
+    
+3. [Exploratory Data Analysis](#3-exploratory-data-analysis)
+    - 3.1 [Thrift B](#31-thrift-b)
+    - 3.2 [Thrift A and C](#32-thrift-a-and-c)
+    - 3.3 [Conclusions of Exploratory Data Analysis](#33-conclusions-of-exploratory-data-analysis)
+    - 3.4 [Recommendations for Future Datasets](#34-recommendations-for-future-datasets)
+    
+    
+4. [Natural Language Processing (NLP)](#4-natural-language-processing-nlp)
+    - 4.1 [Wordcloud](#41-wordcloud)
+    - 4.2 [Bag-of-Words](#42-bag-of-words)
+       - 4.2.1 [Defining a new categorical variable](#421-defining-a-new-categorical-variable)
+       - 4.2.2 [Training and Testing Data](#422-training-and-testing-data)
+       - 4.2.3 [Tokenization](#423-tokenization)
 
-1. Data cleaning
-2. Exploratory data analysis
-3. Natural Language Processing (NLP)
+## 1. Introduction and Data Description
+ 
+Our objective here is to perform a statistical analysis that will help a newly opened thrift store to make efficient and profitful businesses decisions. 
 
 That are three different Thrift Stores: A, B and C. 
 
@@ -253,7 +273,7 @@ print(thrift_c.columns)
           dtype='object')
     
 
-# What are our first impressions?
+### 1.1 What are our first impressions?
                                                                 
 - `id`: Number of identification.                      
 - `marca`: *Brand*.
@@ -270,8 +290,8 @@ print(thrift_c.columns)
 - `PalavraChave`. *Keyword*. It apparently corresponds to the dismemberment of a full descriptive sentence regarding the product being sold, with the multiple instances of `PalavraChave1`, 2, 3, and so on, being able to be understood if fully merged in one sentence.
 
 
-## 1. Data cleaning 
-### Thrift B
+## 2. Data cleaning 
+### 2.1 Thrift B
 
 Multiple `PalavraChave`s (keywords) fields are present at Thrift Store B and the combination of these should be stored as a nomeDaPeca column.
 These `PalavraChave`s (*keywords*) seem to aggregate to full sentences that would be properly placed under the "nomeDaPeca" field. In portuguese, nouns are generally the first word in the sentence, while adjectives come later. From these keywords, we can establish semantically that the first word of these keywords ("PalavraChave1") would be a noun. On the other hand, this syntax would not be possible in English, in which adjectives come first, and the noun varies as a first, second or third word; which would make our work harder.
@@ -340,7 +360,7 @@ print(thrift_b.shape)
 print(thrift_b_nome.shape)
 ```
 
-    (60295, 21)
+    (60295, 22)
     (60295, 8)
     
 
@@ -363,7 +383,7 @@ print(thrift_b.columns)
           dtype='object')
     
 
-### Data cleaning: Thrift Stores A and C
+### 2.2 Data cleaning: Thrift Stores A and C
 
 Now that we have surveyed a bit of the Thrift B dataset, we shall evaluate Thrift Stores A and C.
 It will be interesting to merge all three datasets for further analyses. To do this, we will have to create a similar-sized matrix for all datasets. Let's recapitulate the shape of each dataset to see what needs to be done.
@@ -742,10 +762,19 @@ thrift_c["Medidas"] = np.nan
 
 
 ```python
-#Thrift Stores A and C also needs a discount column.
+#Thrift Stores A, B and C also needs a discount column.
 thrift_a['Desconto'] = 100-((thrift_a['precoComDesconto']/thrift_a['precoSemDesconto'])*100)
+thrift_b['Desconto'] = 100-((thrift_b['precoComDesconto']/thrift_b['precoSemDesconto'])*100)
 thrift_c['Desconto'] = 100-((thrift_c['precoComDesconto']/thrift_c['precoSemDesconto'])*100)
 ```
+
+    <ipython-input-46-a7a238428bce>:3: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame.
+    Try using .loc[row_indexer,col_indexer] = value instead
+    
+    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+      thrift_b['Desconto'] = 100-((thrift_b['precoComDesconto']/thrift_b['precoSemDesconto'])*100)
+    
 
 
 ```python
@@ -758,26 +787,26 @@ print(thrift_b.columns)
 print(thrift_c.columns)
 ```
 
-    (56661, 23)
-    (60295, 22)
-    (1920, 23)
+    (56661, 24)
+    (60295, 24)
+    (1920, 24)
     Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
-           'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Disponível', 'Data',
-           'Status', 'PalavraChave1', 'PalavraChave2', 'PalavraChave3',
-           'PalavraChave4', 'PalavraChave5', 'PalavraChave6', 'PalavraChave7',
-           'PalavraChave8', 'Composicao', 'Medidas', 'Desconto'],
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8', 'item'],
           dtype='object')
     Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
-           'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao', 'Medidas',
-           'Disponível', 'Data', 'Status', 'PalavraChave1', 'PalavraChave2',
-           'PalavraChave3', 'PalavraChave4', 'PalavraChave5', 'PalavraChave6',
-           'PalavraChave7', 'PalavraChave8'],
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8', 'item'],
           dtype='object')
     Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
-           'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Disponível', 'Data',
-           'Status', 'PalavraChave1', 'PalavraChave2', 'PalavraChave3',
-           'PalavraChave4', 'PalavraChave5', 'PalavraChave6', 'PalavraChave7',
-           'PalavraChave8', 'Composicao', 'Medidas', 'Desconto'],
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8', 'item'],
           dtype='object')
     
 
@@ -798,47 +827,19 @@ print(thrift_b.columns)
            'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
            'PalavraChave6', 'PalavraChave7', 'PalavraChave8'],
           dtype='object')
+    Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8'],
+          dtype='object')
+    Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8'],
+          dtype='object')
     
-
-
-    ---------------------------------------------------------------------------
-
-    KeyError                                  Traceback (most recent call last)
-
-    <ipython-input-20-028162562744> in <module>
-          2 thrift_a = thrift_a[['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto', 'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao', 'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1', 'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5', 'PalavraChave6', 'PalavraChave7', 'PalavraChave8']]
-          3 print(thrift_a.columns)
-    ----> 4 thrift_b = thrift_b[['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto', 'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao', 'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1', 'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5', 'PalavraChave6', 'PalavraChave7', 'PalavraChave8']]
-          5 print(thrift_b.columns)
-          6 thrift_c = thrift_c[['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto', 'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao', 'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1', 'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5', 'PalavraChave6', 'PalavraChave7', 'PalavraChave8']]
-    
-
-    ~\anaconda3\lib\site-packages\pandas\core\frame.py in __getitem__(self, key)
-       2804             if is_iterator(key):
-       2805                 key = list(key)
-    -> 2806             indexer = self.loc._get_listlike_indexer(key, axis=1, raise_missing=True)[1]
-       2807 
-       2808         # take() does not accept boolean indexers
-    
-
-    ~\anaconda3\lib\site-packages\pandas\core\indexing.py in _get_listlike_indexer(self, key, axis, raise_missing)
-       1550             keyarr, indexer, new_indexer = ax._reindex_non_unique(keyarr)
-       1551 
-    -> 1552         self._validate_read_indexer(
-       1553             keyarr, indexer, o._get_axis_number(axis), raise_missing=raise_missing
-       1554         )
-    
-
-    ~\anaconda3\lib\site-packages\pandas\core\indexing.py in _validate_read_indexer(self, key, indexer, axis, raise_missing)
-       1644             if not (self.name == "loc" and not raise_missing):
-       1645                 not_found = list(set(key) - set(ax))
-    -> 1646                 raise KeyError(f"{not_found} not in index")
-       1647 
-       1648             # we skip the warning on Categorical/Interval
-    
-
-    KeyError: "['Desconto'] not in index"
-
 
 
 ```python
@@ -853,8 +854,21 @@ print(thrift_abc.shape)
 print(thrift_abc.columns)
 ```
 
-## 2. Exploratory data analysis
-### Data exploration: Thrift B
+    (56661, 23)
+    (60295, 23)
+    (1920, 23)
+    (116956, 23)
+    (118876, 23)
+    Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8'],
+          dtype='object')
+    
+
+## 3. Exploratory Data Analysis
+### 3.1 Thrift B
 
 Now that all thrift store datasets are fixed, Thrift Store B has the nomeDaPeca (*piece of clothing*) column, similar to Thrift Stores A and C.
 Let's analyse each Thrift Store individually, starting at Thrift B, while we are still on it.
@@ -869,12 +883,12 @@ thrift_b.plot(kind='scatter', x='precoComDesconto', y='precoSemDesconto', color=
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0xd2eb490>
+    <matplotlib.axes._subplots.AxesSubplot at 0x55248b0>
 
 
 
 
-![png](thrift_store_files/thrift_store_25_1.png)
+![png](output_26_1.png)
 
 
 There are two main linear trends in the data. The diagonal trend seems to indicate a discount price that is about 70-75% lesser than the full price. For instance, at y(precoSemDesconto)=5000; while on x(precoComDesconto)≈1125-1500.
@@ -887,7 +901,7 @@ fig = sns.scatterplot(x='precoComDesconto', y='precoSemDesconto', hue='Disponív
 ```
 
 
-![png](thrift_store_files/thrift_store_27_0.png)
+![png](output_28_0.png)
 
 
 This is interesting as well. "Vendido" means sold, while "Disponível" means available.
@@ -904,12 +918,12 @@ thrift_b[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0xe2845c8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x5598ac0>
 
 
 
 
-![png](thrift_store_files/thrift_store_29_1.png)
+![png](output_30_1.png)
 
 
 
@@ -921,12 +935,12 @@ thrift_b[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10f2b790>
+    <matplotlib.axes._subplots.AxesSubplot at 0x133de388>
 
 
 
 
-![png](thrift_store_files/thrift_store_30_1.png)
+![png](output_31_1.png)
 
 
 Full prices (precoSemDesconto) are usually arranged at every 10 reais. Utilyzing "round numbers-1" may be a good sales pitch. That is, selling something for 79 reais instead of 80 reais. Or 89 instead of 90. Or 99 instead of 100. We are psychologycally more prone to relate a 99 reais price to a 90 reais rather than to 100 reais, even though the actual price is 9x closer to 100 reais rather than 90.
@@ -991,16 +1005,13 @@ print(thrift_b_count)
     Name: PalavraChave1, dtype: int64
     
 
-These are the top 20 pieces of clothing being sold (and having been sold) at Thrift Store B.
-It diverges considerably from the wordcloud made previously, showing that the wordcloud algorhythm was not working properly for this. Indeed, some NLP will be required later to extract more information from this data. I trust that the interested reader will look for the portuguese words in the bilingual dictionary (www.google.com) if there are any doubts on the meaning of each.
+These are the top 20 pieces of clothing being sold (and having been sold) at Thrift Store B. However, some NLP will be required later to extract more information from this data. I trust that the interested reader will look for the portuguese words in a bilingual dictionary if there are any doubts on the meaning of each.
 
 
 ```python
 #Assign a column filled with '1' to be further counted and grouped
 thrift_b['item'] ='1'
-
-#Since I'm already here, do that for other thrift stores as well
-thrift_a['item'] ='1'
+thrift_a['item'] ='1' #do that for other thrift stores as well
 thrift_c['item'] ='1'
 
 print(thrift_a.columns)
@@ -1043,7 +1054,7 @@ plt.show()
 ```
 
 
-![png](thrift_store_files/thrift_store_36_0.png)
+![png](output_37_0.png)
 
 
 Great! 
@@ -1052,19 +1063,18 @@ Let's go back to analysing discounts.
 
 ```python
 #Divide one column for the other to obtain % of discount
-thrift_b['Desconto'] = 100-((thrift_b['precoComDesconto']/thrift_b['precoSemDesconto'])*100)
 thrift_b[['Desconto']].plot(kind='hist', alpha=0.7, bins=100, range=[0,100])
 ```
 
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x12028fb8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x13ae9e20>
 
 
 
 
-![png](thrift_store_files/thrift_store_38_1.png)
+![png](output_39_1.png)
 
 
 Indeed, most discount seem to occur at the 70-75% range.
@@ -1097,15 +1107,15 @@ plt.xlabel('Óculos')
 
 
 
-![png](thrift_store_files/thrift_store_40_1.png)
+![png](output_41_1.png)
 
 
 
-![png](thrift_store_files/thrift_store_40_2.png)
+![png](output_41_2.png)
 
 
 
-![png](thrift_store_files/thrift_store_40_3.png)
+![png](output_41_3.png)
 
 
 Discount is given at about the same percentage rate regardless of which type of object is being sold.
@@ -1130,16 +1140,16 @@ plt.xlabel('Disponível')
 
 
 
-![png](thrift_store_files/thrift_store_42_1.png)
+![png](output_43_1.png)
 
 
 
-![png](thrift_store_files/thrift_store_42_2.png)
+![png](output_43_2.png)
 
 
 Discount also does not seem to be a factor for differing which pieces have been sold (Vendido) and which pieces are still available (Disponível). In fact, there seems to be a general proportion between objects sold and available, as Thrift Stores might reasonably showcase new products at about the same rate that the products from the former batch have been sold.
 
-## Exploratory data analysis: Thrift Stores A and C
+### 3.2 Thrift Stores A and C
 
 
 ```python
@@ -1155,16 +1165,16 @@ thrift_c[['precoSemDesconto', 'precoComDesconto']].plot(kind='hist', alpha=0.7, 
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1245baa8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x157b5718>
 
 
 
 
-![png](thrift_store_files/thrift_store_45_1.png)
+![png](output_46_1.png)
 
 
 
-![png](thrift_store_files/thrift_store_45_2.png)
+![png](output_46_2.png)
 
 
 
@@ -1177,16 +1187,16 @@ thrift_c[['Desconto']].plot(kind='hist', alpha=0.7, bins=100, range=[0,100])
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x189e5d48>
+    <matplotlib.axes._subplots.AxesSubplot at 0x133cba60>
 
 
 
 
-![png](thrift_store_files/thrift_store_46_1.png)
+![png](output_47_1.png)
 
 
 
-![png](thrift_store_files/thrift_store_46_2.png)
+![png](output_47_2.png)
 
 
 
@@ -1612,7 +1622,7 @@ plt.show()
 ```
 
 
-![png](thrift_store_files/thrift_store_50_0.png)
+![png](output_51_0.png)
 
 
 
@@ -1641,14 +1651,14 @@ print(x2)
     luigi bertolli     56
     gregory            55
     maria filó         45
-    mob                44
     linho fino         44
+    mob                44
     lucidez            43
     ever pretty        42
     tvz                41
     zinzane            38
-    m. officer         37
     shoulder           37
+    m. officer         37
     riachuelo          35
     shop 126           34
     Name: marca, dtype: int64
@@ -1658,7 +1668,7 @@ Tags "sem etiqueta" and "sem marca" would mean "no tag" and "no brand" respectiv
 
 Let's resume the objectives of this project: to perform a statistical analysis that will help businesses decisions in a newly opened thrift store.
  
-### Conclusions from Exploratory Data Analysis
+### 3.3 Conclusions of Exploratory Data Analysis
 
 - Thrift A displays a similar discount pattern to Thrift B, with most products ranging from 65-72%. Coincidentally or not, the median for Thrift Stores A discount prices is exactly 100 reais. It is also the most expensive store (A=100,00; B=25,90; C=59,00).
 - Thrift B has the cheaper prices. It also has the most amounts of items in the dataset, which might indicate either that:
@@ -1669,7 +1679,7 @@ Let's resume the objectives of this project: to perform a statistical analysis t
     - Thrift Store C is relatively new, so it hasn't sold as many products as the other stores. 
     If the former supposition is the case, then Thrift Store C ends up being the least profitful of all Thrift Stores (which does not necessarily mean that it is the least successful, since success is completely relative to what your objectives are as an entrepreneur).
  
-### Recommendations for future datasets
+### 3.4 Recommendations for Future Datasets
 
 The dataset would be considerably more useful, businesswise, if it had:
 - The price that the Thrift Stores paid for each product before they were put on sale, which would allow us to calculate the profit.
@@ -1678,11 +1688,11 @@ The dataset would be considerably more useful, businesswise, if it had:
 
 
 
-## 3. Natural Language Processing (NLP)
+## 4. Natural Language Processing (NLP)
 We use some basic NLP techniques to extract more information from the Thrift Store datasets.
 
 
-### Wordcloud
+### 4.1 Wordcloud
 
 First, Let's evaluate which were the most commonly used words in the description by exhibiting a "wordcloud", as a preview to our NLP.
 We shall also eliminate common propositions in portuguese, and focus on nouns and adjectives that tend to better characterise the objects we are evaluating.
@@ -1699,12 +1709,12 @@ plt.imshow(wordcloud, interpolation='bilinear')
 
 
 
-    <matplotlib.image.AxesImage at 0xd364ec8>
+    <matplotlib.image.AxesImage at 0x132edbb0>
 
 
 
 
-![png](thrift_store_files/thrift_store_56_1.png)
+![png](output_57_1.png)
 
 
 Fine. Now let's apply wordcloud for the first order keyword (which would correspond to the main nouns in the dataset).
@@ -1720,21 +1730,21 @@ plt.imshow(wordcloud2, interpolation='bilinear')
 
 
 
-    <matplotlib.image.AxesImage at 0xe98ae08>
+    <matplotlib.image.AxesImage at 0x158be5c8>
 
 
 
 
-![png](thrift_store_files/thrift_store_58_1.png)
+![png](output_59_1.png)
 
 
 That does not seem to work well given that, intuitivelly, it is much harder to imagine that "Anabela" (a specific type of sandal) and "Colete" (waistcoat) would have the same weight as standard pieces of clothing such as "Calça" (trousers *aka in US* pants) and "Camisa" (shirt). 
 
 Also, as we have seen previously, the most common pieces of clothing in Thrift Store B are: Vestido, Calça, Blusa, Camisa, Saia, Blusinha... And so on, which is incompatible, at least in this instance, with the results obtained via wordcloud.
 
-### Bag-of-Words
+### 4.2 Bag-of-Words
 
-#### Defining a new categorical variable
+#### 4.2.1 Defining a new categorical variable
 We will first establish a new categorical data to divide our data into "caro" (expensive) and "barato" (cheap). To define which one is which, we will first get the median for each dataset. In the real world, we would probably define which values are expensive or cheap depending on the values we have in our pocket. However, in our simulated world, we will artifically define this boundary so that we can simmetrically divide our datasets. The values above the median will be defined as expensive; the values below the median will be defined as cheap. 
 
 Firstly, we will only analyse the data on Thrift Store B to avoid descriptive difference that would be inherent from the different stores we're modelling.
@@ -1749,10 +1759,10 @@ print(thrift_b.columns)
 ```
 
     Index(['id', 'marca', 'nomeDaPeca', 'precoComDesconto', 'precoSemDesconto',
-           'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao', 'Medidas',
-           'Disponível', 'Data', 'Status', 'PalavraChave1', 'PalavraChave2',
-           'PalavraChave3', 'PalavraChave4', 'PalavraChave5', 'PalavraChave6',
-           'PalavraChave7', 'PalavraChave8', 'cost'],
+           'Desconto', 'Descricao', 'Tamanho', 'Condicao', 'Cores', 'Composicao',
+           'Medidas', 'Disponível', 'Data', 'Status', 'PalavraChave1',
+           'PalavraChave2', 'PalavraChave3', 'PalavraChave4', 'PalavraChave5',
+           'PalavraChave6', 'PalavraChave7', 'PalavraChave8', 'item', 'cost'],
           dtype='object')
     
 
@@ -1812,13 +1822,12 @@ thrift_b
       <th>nomeDaPeca</th>
       <th>precoComDesconto</th>
       <th>precoSemDesconto</th>
+      <th>Desconto</th>
       <th>Descricao</th>
       <th>Tamanho</th>
       <th>Condicao</th>
       <th>Cores</th>
-      <th>Composicao</th>
       <th>...</th>
-      <th>Status</th>
       <th>PalavraChave1</th>
       <th>PalavraChave2</th>
       <th>PalavraChave3</th>
@@ -1827,6 +1836,7 @@ thrift_b
       <th>PalavraChave6</th>
       <th>PalavraChave7</th>
       <th>PalavraChave8</th>
+      <th>item</th>
       <th>cost</th>
     </tr>
   </thead>
@@ -1838,13 +1848,12 @@ thrift_b
       <td>Anabela Laço Laranja</td>
       <td>49.99</td>
       <td>100.00</td>
+      <td>50.010000</td>
       <td>Sandália anabela de tecido laminado vazado, fe...</td>
       <td>37</td>
       <td>gentilmente usada</td>
       <td>laranja</td>
-      <td>Tecido laminado</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Anabela</td>
       <td>Laço</td>
       <td>Laranja</td>
@@ -1853,6 +1862,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -1862,13 +1872,12 @@ thrift_b
       <td>Vestido Camisa Xadrez Mob</td>
       <td>139.97</td>
       <td>449.90</td>
+      <td>68.888642</td>
       <td>Vestido camisa xadrez, com mangas 7/8. Bolsos ...</td>
       <td>m</td>
       <td>gentilmente usada</td>
       <td>colorido</td>
-      <td>55% linho 45% algodão</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Vestido</td>
       <td>Camisa</td>
       <td>Xadrez</td>
@@ -1878,6 +1887,7 @@ thrift_b
       <td></td>
       <td></td>
       <td>1</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1886,13 +1896,12 @@ thrift_b
       <td>Vestido Verde Militar Farm</td>
       <td>74.70</td>
       <td>249.00</td>
+      <td>70.000000</td>
       <td>Vestido Farm cor verde militar, comprimento cu...</td>
       <td>p</td>
       <td>nova com etiqueta</td>
       <td>verde</td>
-      <td>100% poliéster</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Vestido</td>
       <td>Verde</td>
       <td>Militar</td>
@@ -1901,6 +1910,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -1910,13 +1920,12 @@ thrift_b
       <td>Colete de Crochê Marrom Claro</td>
       <td>25.25</td>
       <td>135.00</td>
+      <td>81.296296</td>
       <td>Colete em crochê, cor marrom claro, modelo com...</td>
       <td>m</td>
       <td>gentilmente usada</td>
       <td>marrom</td>
-      <td>sem etiqueta</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Colete</td>
       <td>de</td>
       <td>Crochê</td>
@@ -1925,6 +1934,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -1934,13 +1944,12 @@ thrift_b
       <td>Vestido Laranja com Bolinhas Azuis</td>
       <td>26.21</td>
       <td>189.90</td>
+      <td>86.197999</td>
       <td>Vestido reto de tecido plano laranja escuro, c...</td>
       <td>pp</td>
       <td>gentilmente usada</td>
       <td>laranja</td>
-      <td>100% poliéster</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Vestido</td>
       <td>Laranja</td>
       <td>com</td>
@@ -1949,6 +1958,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -1982,13 +1992,12 @@ thrift_b
       <td>Calça Jeans Skinny Clock House</td>
       <td>27.20</td>
       <td>80.00</td>
+      <td>66.000000</td>
       <td>Calça jeans com modelagem skinny, com dois bol...</td>
       <td>44</td>
       <td>gentilmente usada</td>
       <td>azul</td>
-      <td>sem etiqueta</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Calça</td>
       <td>Jeans</td>
       <td>Skinny</td>
@@ -1997,6 +2006,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -2006,13 +2016,12 @@ thrift_b
       <td>Vestido Longo Floral Magia</td>
       <td>21.48</td>
       <td>85.90</td>
+      <td>74.994179</td>
       <td>Vestido longo, com estampa floral colorida, da...</td>
       <td>m</td>
       <td>gentilmente usada</td>
       <td>colorido</td>
-      <td>87% poliamida 13% elastano</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Vestido</td>
       <td>Longo</td>
       <td>Floral</td>
@@ -2021,6 +2030,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -2030,13 +2040,12 @@ thrift_b
       <td>Camisa Branca Zara</td>
       <td>27.00</td>
       <td>89.99</td>
+      <td>69.996666</td>
       <td>Camisa branca, com bolso único na regiÃ£o do t...</td>
       <td>18m</td>
       <td>gentilmente usada</td>
       <td>branco</td>
-      <td>80% AlgodÃ£o 20% Linho</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Camisa</td>
       <td>Branca</td>
       <td>Zara</td>
@@ -2045,6 +2054,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -2054,13 +2064,12 @@ thrift_b
       <td>Camiseta Infantil Raglan</td>
       <td>10.00</td>
       <td>29.99</td>
+      <td>66.655552</td>
       <td>Camisetinha raglan com decote fechado, manga c...</td>
       <td>3</td>
       <td>gentilmente usada</td>
       <td>colorido</td>
-      <td>85% poliéster, 15% elastano</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Camiseta</td>
       <td>Infantil</td>
       <td>Raglan</td>
@@ -2069,6 +2078,7 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
     <tr>
@@ -2078,13 +2088,12 @@ thrift_b
       <td>Blusa Verde Forever 21</td>
       <td>29.44</td>
       <td>117.75</td>
+      <td>74.997877</td>
       <td>Blusa feminina , verde, da Forever 21. Tecido ...</td>
       <td>m</td>
       <td>gentilmente usada</td>
       <td>verde</td>
-      <td>100% Poliéster</td>
       <td>...</td>
-      <td>VERIFICADO</td>
       <td>Blusa</td>
       <td>Verde</td>
       <td>Forever</td>
@@ -2093,16 +2102,17 @@ thrift_b
       <td></td>
       <td></td>
       <td></td>
+      <td>1</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>60295 rows × 23 columns</p>
+<p>60295 rows × 25 columns</p>
 </div>
 
 
 
-### Training and testing data
+### 4.2.2 Training and Testing Data
 
 
 ```python
@@ -2123,20 +2133,24 @@ text_train, text_test, y_train, y_test = train_test_split(thrift_b['Descricao'],
 
 
 ```python
-print("text_train shape: {}".format(X_train.shape))
+print("text_train shape: {}".format(text_train.shape))
 print("y_train shape: {}".format(y_train.shape))
 ```
 
-    text_train shape: (45221, 3175)
+    text_train shape: (45221,)
     y_train shape: (45221,)
     
 
 
 ```python
 #The split usually puts 75% of data in the training data, and 25% at the test data
-print("text_test shape: {}".format(X_test.shape))
+print("text_test shape: {}".format(text_test.shape))
 print("y_test shape: {}".format(y_test.shape))
 ```
+
+    text_test shape: (15074,)
+    y_test shape: (15074,)
+    
 
 
 ```python
@@ -2145,10 +2159,19 @@ print("length of text_train: {}".format(len(text_train)))
 print("text_train[1]:\n{}".format(text_train[1]))
 ```
 
+    type of text_train: <class 'pandas.core.series.Series'>
+    length of text_train: 45221
+    text_train[1]:
+    Vestido camisa xadrez, com mangas 7/8. Bolsos laterais, faixa na cintura e abotoamento simples. Tamanho M.
+    
+
 
 ```python
 print("Samples per class (training): {}".format(np.bincount(y_train)))
 ```
+
+    Samples per class (training): [42773  2448]
+    
 
 
 ```python
@@ -2158,7 +2181,12 @@ print("type of y_train: {}".format(type(y_train)))
 print("type of y_test: {}".format(type(y_test)))
 ```
 
-Tokenization
+    type of text_test: <class 'pandas.core.series.Series'>
+    type of y_train: <class 'pandas.core.series.Series'>
+    type of y_test: <class 'pandas.core.series.Series'>
+    
+
+### 4.2.3 Tokenization
 
 
 ```python
@@ -2256,7 +2284,7 @@ print("Mean cross-validation accuracy: {:.2f}".format(np.mean(scores)))
 
 
 ```python
-#We obtained 95%, which is not ideal to say the least.
+#We obtained 95%, which is interesting
 #Let's try to tune the C parameter of the LinearRegression
 from sklearn.model_selection import GridSearchCV
 param_grid = {'C': [0.001, 0.01, 0.1, 1, 10]}
@@ -2508,7 +2536,7 @@ param_grid = {'logisticregression__C': [0.001, 0.01, 0.1, 1, 10]}
 
 ```python
 grid = GridSearchCV(pipe, param_grid, cv=5)
-text_train = text_train.fillna(' ')
+text_train2 = text_train.fillna(' ')
 grid.fit(text_train2, y_train)
 print("Best cross-validation score: {:.2f}".format(grid.best_score_))
 ```
@@ -2695,7 +2723,7 @@ feature_names, n_top_features=40)
 ```
 
 
-![png](thrift_store_files/thrift_store_89_0.png)
+![png](output_90_0.png)
 
 
 This last diagram shows which brands are hierarchically related to cheap or expensive products.
